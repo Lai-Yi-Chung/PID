@@ -1,0 +1,40 @@
+#ifndef GEOMETRY_CONTROL_H
+#define GEOMETRY_CONTROL_H
+#include <eigen3/Eigen/Dense>
+#include <eigen3/Eigen/Core>
+#include <iostream>
+#include <eigen3/Eigen/Dense>
+using namespace Eigen;
+using namespace std;
+class geometry_control
+{
+public:
+    geometry_control();
+
+    float q[4];
+    double sample_freq;
+    Eigen::MatrixXd inertia;
+    Eigen::VectorXd K_R, K_omega, K_i, K_m;
+
+    Eigen::VectorXd F_des, Global_yaw_des;
+    Eigen::VectorXd B_X_des, B_Y_des, B_Z_des;
+
+    Eigen::MatrixXd R, R_des, last_R_des, R_des_dot;
+    Eigen::VectorXd omega, omega_des, last_omega_des, omega_des_dot;
+
+    Eigen::VectorXd error_R, error_omega, temp;
+    Eigen::VectorXd accum_attitude_error;
+    Eigen::VectorXd state;//force and torque
+    Eigen::VectorXd force;//motor force
+    
+    void set(float F_x, float F_y, float F_z);
+    void Quaternion_to_Rotation_Matrix(float q0, float q1, float q2, float q3);
+    Eigen::VectorXd vee_map(Eigen::MatrixXd matrix); //return 3*1 vector
+    Eigen::MatrixXd inv_vee_map(Eigen::VectorXd vector); //return 3*3 matrix
+
+    Eigen::VectorXd geometry_controller(Eigen::VectorXd q,Eigen::VectorXd F,Eigen::VectorXd ang_vel);
+    
+
+};
+
+#endif // GEOMETRY_CONTROL_H
